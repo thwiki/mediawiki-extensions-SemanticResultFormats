@@ -281,7 +281,8 @@ class SRFMath extends SMWResultPrinter {
 	 * @see SMWResultPrinter::getResultText()
 	 */
 	protected function getResultText( SMWQueryResult $res, $outputmode ) {
-		$numbers = $this->getNumbers( $res );
+		$data = false;
+		$numbers = $this->getNumbers( $res, $data );
 
 		if ( count( $numbers ) == 0 ) {
 			return $this->params['default'];
@@ -289,63 +290,68 @@ class SRFMath extends SMWResultPrinter {
 
 		switch ( $this->mFormat ) {
 			case 'max':
-				return MathFormats::max_function( $numbers );
+				$number = MathFormats::max_function( $numbers );
 				break;
 			case 'min':
-				return MathFormats::min_function( $numbers );
+				$number = MathFormats::min_function( $numbers );
 				break;
 			case 'sum':
-				return MathFormats::sum_function( $numbers );
+				$number = MathFormats::sum_function( $numbers );
 				break;
 			case 'product':
-				return MathFormats::product_function( $numbers );
+				$number = MathFormats::product_function( $numbers );
 				break;
 			case 'average':
-				return MathFormats::average_function( $numbers );
+				$number = MathFormats::average_function( $numbers );
 				break;
 			case 'median':
-				return MathFormats::median_function( $numbers );
+				$number = MathFormats::median_function( $numbers );
 				break;
 			case 'variance':
-				return MathFormats::variance_function( $numbers );
+				$number = MathFormats::variance_function( $numbers );
 				break;
 			case 'samplevariance':
-				return MathFormats::samplevariance_function( $numbers );
+				$number = MathFormats::samplevariance_function( $numbers );
 				break;
 			case 'samplestandarddeviation':
-				return MathFormats::samplestandarddeviation_function( $numbers );
+				$number = MathFormats::samplestandarddeviation_function( $numbers );
 				break;
 			case 'standarddeviation':
-				return MathFormats::standarddeviation_function( $numbers );
+				$number = MathFormats::standarddeviation_function( $numbers );
 				break;
 			case 'range':
-				return MathFormats::range_function( $numbers );
+				$number = MathFormats::range_function( $numbers );
 				break;
 			case 'quartillower':
-				return MathFormats::quartillower_inc_function( $numbers );
+				$number = MathFormats::quartillower_inc_function( $numbers );
 				break;
 			case 'quartilupper';
-				return MathFormats::quartilupper_inc_function( $numbers );
+				$number = MathFormats::quartilupper_inc_function( $numbers );
 				break;
 			case 'quartillower.exc';
-				return MathFormats::quartillower_exc_function( $numbers );
+				$number = MathFormats::quartillower_exc_function( $numbers );
 				break;
 			case 'quartilupper.exc';
-				return MathFormats::quartilupper_exc_function( $numbers );
+				$number = MathFormats::quartilupper_exc_function( $numbers );
 				break;
 			case 'interquartilerange':
-				return MathFormats::interquartilerange_inc_function( $numbers );
+				$number = MathFormats::interquartilerange_inc_function( $numbers );
 				break;
 			case 'interquartilerange.exc';
-				return MathFormats::interquartilerange_exc_function( $numbers );
+				$number = MathFormats::interquartilerange_exc_function( $numbers );
 				break;
 			case 'mode';
-				return MathFormats::mode_function( $numbers );
+				$number = MathFormats::mode_function( $numbers );
 				break;
 			case 'interquartilemean';
-				return MathFormats::interquartilemean_function( $numbers );
+				$number = MathFormats::interquartilemean_function( $numbers );
 				break;
 		}
+
+		if ( is_numeric( $number ) && $number !== '' && $data !== false && method_exists( $data, 'getFormattedValue' ) ){
+			return $data->getFormattedValue( $number );
+		}
+		return $number;
 	}
 
 	/**
@@ -353,10 +359,22 @@ class SRFMath extends SMWResultPrinter {
 	 *
 	 * @return float[]
 	 */
-	private function getNumbers( SMWQueryResult $res ) {
+	private function getNumbers( SMWQueryResult $res, &$data ) {
 		$numbers = [];
+		$isfirst = true;
 
 		while ( $row = $res->getNext() ) {
+			if( $isfirst ){
+				foreach ( $row as &$field ) {
+					while ( $dv = $field->getNextDataValue() ) {
+						if ( $dv->getDataItem()->getDIType() == SMWDataItem::TYPE_NUMBER || $dv->getDataItem()->getDIType() == \DurationExtSMW::TYPE_PRICE ){
+							$data = $dv;
+							break 2;
+						}
+					}
+				}
+				$isfirst = false;
+			}
 			foreach ( $row as $resultArray ) {
 				foreach ( $resultArray->getContent() as $dataItem ) {
 					self::addNumbersForDataItem( $dataItem, $numbers );
@@ -373,7 +391,7 @@ class SRFMath extends SMWResultPrinter {
 	 */
 	private function addNumbersForDataItem( SMWDataItem $dataItem, array &$numbers ) {
 		switch ( $dataItem->getDIType() ) {
-			case SMWDataItem::TYPE_NUMBER:
+			case SMWDataItem::TYPE_NUMBER: case \DurationExtSMW::TYPE_PRICE:
 				$numbers[] = $dataItem->getNumber();
 				break;
 			case SMWDataItem::TYPE_CONTAINER:
