@@ -367,7 +367,7 @@ class SRFMath extends SMWResultPrinter {
 			if( $isfirst ){
 				foreach ( $row as &$field ) {
 					while ( $dv = $field->getNextDataValue() ) {
-						if ( $dv->getDataItem()->getDIType() == SMWDataItem::TYPE_NUMBER || $dv->getDataItem()->getDIType() == \DurationExtSMW::TYPE_PRICE ){
+						if ( $dv->getDataItem()->getDIType() == SMWDataItem::TYPE_NUMBER || $dv->getDataItem()->getDIType() == \DurationExtensionSMWHooks::TYPE_PRICE ){
 							$data = $dv;
 							break 2;
 						}
@@ -391,7 +391,7 @@ class SRFMath extends SMWResultPrinter {
 	 */
 	private function addNumbersForDataItem( SMWDataItem $dataItem, array &$numbers ) {
 		switch ( $dataItem->getDIType() ) {
-			case SMWDataItem::TYPE_NUMBER: case \DurationExtSMW::TYPE_PRICE:
+			case SMWDataItem::TYPE_NUMBER: case \DurationExtensionSMWHooks::TYPE_PRICE:
 				$numbers[] = $dataItem->getNumber();
 				break;
 			case SMWDataItem::TYPE_CONTAINER:
