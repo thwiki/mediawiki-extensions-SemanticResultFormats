@@ -115,12 +115,7 @@ return [
 	'ext.srf' => $moduleTemplate + [
 		'scripts' => 'resources/ext.srf.js',
 		'styles'  => [
-			'resources/ext.srf.css',
-
-			// Someone broke the CSS loading (Suspect bug 46401) in 1.22
-			// until this is fixed force styles to be loaded at the very start
-			// to avoid display clutter
-			'formats/calendar/resources/ext.srf.formats.eventcalendar.css',
+			'resources/ext.srf.css'
 		],
 		'dependencies' => 'ext.smw.api',
 		'position' => 'top',
@@ -131,8 +126,7 @@ return [
 		'styles'  => [
 			'resources/ext.srf.css',
 		],
-		'position' => 'top',
-		'group' => 'ext.srf'
+		'position' => 'top'
 	],
 
 	// SMW/SRF query/result api module
@@ -462,6 +456,7 @@ return [
 	// Chart specific declarations
 	'ext.srf.jqplot.chart' => $formatModule + [
 		'scripts' => [
+			'jqplot/resources/ext.srf.jqplot.chart.bubble.js',
 			'jqplot/resources/ext.srf.jqplot.chart.bar.js',
 			'jqplot/resources/ext.srf.jqplot.chart.pie.js',
 			'jqplot/resources/ext.srf.jqplot.chart.js',
@@ -832,7 +827,11 @@ return [
 	'ext.srf.slideshow' => $formatModule + [
 		'scripts' => 'slideshow/resources/ext.srf.slideshow.js',
 		'styles'  => 'slideshow/resources/ext.srf.slideshow.css',
-		'dependencies' => 'mediawiki.util'
+		'dependencies' => 'mediawiki.util',
+		'messages' => [
+			'srf-ui-slideshow-slide-button-play',
+			'srf-ui-slideshow-slide-button-pause'
+		]
 	],
 
 	// Tagcanvas module
@@ -927,7 +926,7 @@ return [
 
 	// jQuery DataTables
 	'jquery.dataTables' => $moduleTemplate + [
-		'scripts' => 'resources/jquery/datatables/jquery.dataTables.js',
+		'scripts' => 'resources/jquery/datatables/datatables.min.js',
 		'position' => 'top'
 	],
 
@@ -936,15 +935,44 @@ return [
 		'scripts'  => 'resources/jquery/datatables/jquery.dataTables.extras.js',
 	],
 
-	// DataTables implementation
-	'ext.srf.datatables' => $formatModule + [
-		'scripts' => 'datatables/resources/ext.srf.formats.datatables.js',
-		'styles'  => 'datatables/resources/ext.srf.formats.datatables.css',
+	'ext.srf.carousel.module' => $moduleTemplate + [
+		'styles' => [
+			'resources/slick/slick.css',
+			'resources/slick/slick-theme.css',
+		],
+		'scripts' => [
+			'resources/slick/slick.js'
+		]
+	],
+
+	'ext.srf.carousel' => $formatModule + [
+		'scripts' => [
+			'carousel/resources/ext.srf.formats.carousel.js'
+		],
+		'styles' => [
+			'carousel/resources/ext.srf.formats.carousel.css'
+		],
 		'dependencies' => [
-			'jquery.dataTables',
-			'jquery.dataTables.extras',
-			'jquery.ui',
 			'ext.smw.dataItem',
+			'ext.smw.api',
+			'ext.srf.api',
+			'ext.srf.util',
+			'ext.srf.widgets'
+		],
+	],
+
+	'ext.srf.datatables.v2.format' => $formatModule + [
+		'scripts' => [
+			'datatables/resources/ext.srf.formats.datatables.js',
+		],
+		'styles'  => [
+			 'datatables/resources/ext.srf.formats.datatables.css'
+		],
+		'dependencies' => [
+			'ext.srf.datatables.v2.module',
+			'mediawiki.cookie',
+			'oojs-ui-core',
+			'oojs-ui-widgets',
 			'ext.smw.api',
 			'ext.srf.api',
 			'ext.srf.util',
@@ -956,6 +984,8 @@ return [
 			'srf-ui-datatables-label-filters',
 			'srf-ui-datatables-label-information',
 			'srf-ui-datatables-panel-disclaimer',
+			'srf-ui-datatables-refresh-button-title',
+			'srf-ui-datatables-panel-switch-button-title',
 			'srf-ui-datatables-label-update-success',
 			'srf-ui-datatables-label-update-error',
 			'srf-ui-datatables-label-sEmptyTable',
@@ -980,24 +1010,19 @@ return [
 			'srf-ui-datatables-label-multiselect-column-selectedtext',
 			'srf-ui-datatables-label-placeholder-column-search',
 			'srf-ui-datatables-label-content-cache',
-			'srf-ui-datatables-label-content-server'
+			'srf-ui-datatables-label-content-server',
+			'srf-ui-datatables-searchpanes-noajax'
 		]
 	],
 
-	// DataTables bootstrap
-	'ext.srf.datatables.bootstrap' => $moduleTemplate + [
-		'scripts' => 'resources/jquery/datatables/jquery.dataTables.bootstrap.js',
-		'styles'  => 'resources/jquery/datatables/jquery.dataTables.bootstrap.css',
-		'dependencies' => 'ext.srf.datatables'
-	],
-
-	// DataTables basic
-	'ext.srf.datatables.basic' => $moduleTemplate + [
-		'styles'  => [
-			'resources/jquery/datatables/jquery.dataTables.css',
-			'resources/jquery/datatables/jquery.dataTables.images.css'
+	'ext.srf.datatables.v2.module' => $moduleTemplate + [
+		'scripts' => [
+			'resources/jquery/datatables/datatables.min.js',
+			'resources/jquery/datatables/jquery.dataTables.extras.js',
 		],
-		'dependencies' => 'ext.srf.datatables'
+		'styles'  => [
+			'resources/jquery/datatables/datatables.min.css',
+		]
 	],
 
 	// Mermaid Format
@@ -1016,7 +1041,6 @@ return [
 				'srf-boilerplate-message'
 			),
 		);
-
 		// Using the semanticFormats namespace class implementation
 		'ext.srf.boilerplate.namespace' => $formatModule + array(
 			'scripts' => 'boilerplate/resources/ext.srf.boilerplate.namespace.js',

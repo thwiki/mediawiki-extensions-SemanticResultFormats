@@ -1,5 +1,46 @@
 These are the release notes for the [Semantic Result Formats](https://www.semantic-mediawiki.org/wiki/Extension:Semantic_Result_Formats) (a.k.a SRF) MediaWiki extension.
 
+## SRF 4.2.0
+
+Released on December 7, 2023.
+
+* Improved compatibility with recent versions of MediaWiki [792](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/792), [780](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/780) (by @Seb35 and @D-Groenewegen)
+* Improved test coverage [789](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/791), [791](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/791) (by [gesinn.it](https://gesinn.it))
+* [790](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/790) removed datatables-legacy format (by @YvarRavy)
+* [786](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/786) improved datatables format (by @alistair3149)
+* [788](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/788) resource loading spinner (by @thomas-topway-it for ([KM-A](https://km-a.net))
+* [782](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/783) fixes jqplotchart issue (by @thomas-topway-it for ([KM-A](https://km-a.net))
+* [777](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/777) fixes eventcalender issue (by @thomas-topway-it for ([KM-A](https://km-a.net))
+* Further improvements of datatables format: [775](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/775), [774](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/774), [773](https://github.com/SemanticMediaWiki/SemanticResultFormats/pull/773) (by @thomas-topway-it for ([KM-A](https://km-a.net))
+* Fixed NONCEs on inline scripts in order to support CSP-Header
+* Fixed GraphViz extension support in the Graph format (by [Professional Wiki](https://professional.wiki))
+
+## SRF 4.1.0
+
+Released on October 12, 2023.
+
+* [Complete rewrite of datatables format](https://www.semantic-mediawiki.org/w/index.php?title=Help:Datatables_format) (by @thomas-topway-it, [KM-A](https://knowledge.wiki)). [761](https://github.com/SemanticMediaWiki/SemanticResultFormats/issues/761), [750](https://github.com/SemanticMediaWiki/SemanticResultFormats/issues/750), [725](https://github.com/SemanticMediaWiki/SemanticResultFormats/issues/725), [571](https://github.com/SemanticMediaWiki/SemanticResultFormats/issues/571), [721](https://github.com/SemanticMediaWiki/SemanticResultFormats/issues/721)...
+* Fixed jqplotchart label error (by @thomas-topway-it)
+* Fixed preferred label issue in eventcalendar (by @thomas-topway-it)
+
+## SRF 4.0.2
+
+Released on March 9, 2023.
+
+* Improved compatibility with recent versions of MediaWiki, especially 1.37, 1.38 and 1.39
+* [724](https://github.com/SemanticMediaWiki/SemanticResultFormats/issues/724) Fix problem in pagewidget carousel when bootstrap is used (by @thomas-topway-it, [KM-A](https://knowledge.wiki))
+* [188](https://github.com/SemanticMediaWiki/SemanticResultFormats/issues/188#) Fix for datatables format (by @harugon)
+* Fix minor error in filtered format (by @Semantisch, [KM-A](https://knowledge.wiki))
+* Fix error in slideshow format (by @Semantisch, [KM-A](https://knowledge.wiki))
+* Fix Outline format sometimes not showing all values (by @Seb35)
+* Solved potential `symfony/css-selector` package conflict (by @rvogel)
+* Bump moment from 2.24.0 to 2.29.2 in /formats/filtered
+* Bump tar from 4.4.8 to 4.4.19 in /formats/filtered
+
+## SRF 4.0.1
+
+Released on January 26, 2022.
+
 ## SRF 4.0.0
 
 Released on January 25, 2022.
